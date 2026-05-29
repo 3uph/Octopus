@@ -6,6 +6,7 @@ import { clearToken } from "@/lib/api";
 
 const NAV = [
   { href: "/companies", label: "Companies" },
+  { href: "/intelligence", label: "Intelligence" },
 ];
 
 export default function Shell({ children }: { children: React.ReactNode }) {

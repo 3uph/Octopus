@@ -23,7 +23,9 @@ app = FastAPI(
 )
 
 # Routers
-from app.api.routes import auth, companies, programs, audits, scope, recon, intelligence  # noqa: E402
+from app.api.routes import (  # noqa: E402
+    auth, companies, programs, audits, scope, recon, intelligence, intel_osint,
+)
 app.include_router(auth.router)
 app.include_router(companies.router)
 app.include_router(programs.router)
@@ -31,6 +33,7 @@ app.include_router(audits.router)
 app.include_router(scope.router)
 app.include_router(recon.router)
 app.include_router(intelligence.router)
+app.include_router(intel_osint.router)
 
 
 @app.get("/health")
