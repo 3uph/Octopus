@@ -1,0 +1,17 @@
+{
+  "_comment": "Plantilla de MCP servers del proyecto Octopus. JSON no admite comentarios reales; las claves con prefijo _ son notas. Copia este archivo a .mcp.json y ajusta. NO subas .mcp.json si contiene secretos. Ver docs/development_guidelines/CLAUDE_CODE_SETUP.md.",
+  "_notes": {
+    "context7": "Requiere npx (Node). Si falla con ENOENT, instala npm/npx. No necesita token para uso básico; si tu plan requiere API key, ponla en .mcp.json LOCAL (no commitear) o como variable de entorno.",
+    "secrets": "NUNCA pongas tokens, credenciales ni rutas absolutas personales en este .example. Usa variables de entorno o un .mcp.json local ignorado por git.",
+    "rutas": "Usa comandos en PATH (npx, node). Evita rutas absolutas como /home/usuario/..."
+  },
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "_env_example": {
+        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
+      }
+    }
+  }
+}

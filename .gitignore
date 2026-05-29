@@ -1,0 +1,52 @@
+# === Secretos y entorno (NUNCA commitear) ===
+.env
+.env.*
+!.env.example
+*.token
+*token*
+*secret*
+*credentials*
+*.pem
+*.key
+*.keystore
+id_rsa
+id_ed25519
+
+# === MCP local (puede contener secretos) ===
+# .mcp.example.json SÍ se commitea; el .mcp.json real NO si tiene secretos.
+.mcp.json
+
+# === Config de usuario de Claude Code (fuera del repo, por si acaso) ===
+.claude.json
+.claude/settings.local.json
+
+# === Datos del proyecto (volúmenes, outputs de recon) ===
+data/
+raw_outputs/
+**/raw_outputs/
+screenshots/
+exports/
+
+# === Logs (pueden contener datos sensibles) ===
+*.log
+logs/
+
+# === Temporales / build ===
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+node_modules/
+.next/
+dist/
+build/
+*.tmp
+*.swp
+.DS_Store
+
+# === Lo que SÍ se commitea (NO ignorar) ===
+# .claude/settings.json
+# .claude/commands/
+# .mcp.example.json
+# docs/
