@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     secret_key: str = "change_me_in_production"
     encryption_key: str = "change_me_in_production"
 
+    # JWT (ADR-007)
+    jwt_expire_minutes: int = 480  # 8 hours
+
     # LLM
     llm_provider: Literal["mock", "ollama", "anthropic"] = "mock"
     ollama_base_url: str = "http://localhost:11434"

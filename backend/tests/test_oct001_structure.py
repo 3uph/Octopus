@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent.parent  # repo root
+ROOT = Path(__file__).resolve().parent.parent.parent  # repo root (absolute)
 
 
 def _exists(rel: str) -> bool:

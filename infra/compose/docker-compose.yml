@@ -30,6 +30,7 @@ services:
       DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-octopus}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-octopus}
       REDIS_URL: redis://redis:6379/0
       SECRET_KEY: ${SECRET_KEY:?SECRET_KEY is required}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?ENCRYPTION_KEY is required}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
     depends_on:
       postgres:
@@ -41,6 +42,24 @@ services:
       interval: 15s
       timeout: 10s
       retries: 5
+
+  worker:
+    build:
+      context: ../../backend
+      dockerfile: ../infra/docker/worker.Dockerfile
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-octopus}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-octopus}
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: ${SECRET_KEY:?SECRET_KEY is required}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?ENCRYPTION_KEY is required}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    deploy:
+      replicas: 1
 
   frontend:
     build:
