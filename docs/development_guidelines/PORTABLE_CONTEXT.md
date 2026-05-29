@@ -47,6 +47,6 @@
 
 ## Estado del proyecto
 
-Fase de diseño. Sin código de aplicación implementado. Próximo issue pendiente: **OCT-001** (ver `SPRINT_0_1_ISSUES.md`).
+Sprint 0 en progreso. OCT-001, OCT-002, OCT-003, OCT-004 completados. Próximo issue pendiente: **OCT-020** (Imagen worker + Dramatiq + cola Redis).
 
 > Mantener este archivo actualizado con el "siguiente issue pendiente" conforme avance el desarrollo, para que cualquier PC retome el estado correcto.

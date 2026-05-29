@@ -1,22 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
-    "defaultMode": "ask",
-    "allow": [
-      "Read",
-      "Glob",
-      "Grep"
-    ],
-    "ask": [
-      "Edit",
-      "Write",
-      "Bash"
-    ],
+    "defaultMode": "dontAsk",
     "deny": [
-      "Bash(rm -rf*)",
       "Bash(sudo*)",
-      "Bash(curl*)",
-      "Bash(wget*)",
+      "Bash(rm -rf*)",
       "Bash(nmap*)",
       "Bash(nuclei*)",
       "Bash(subfinder*)",
@@ -25,10 +13,23 @@
       "Bash(feroxbuster*)",
       "Bash(masscan*)",
       "Bash(amass*)",
+      "Bash(naabu*)",
+      "Bash(assetfinder*)",
+      "Bash(dnsx*)",
+      "Bash(katana*)",
+      "Bash(gau*)",
+      "Bash(waybackurls*)",
+      "Bash(gowitness*)",
+      "Bash(trufflehog*)",
+      "Bash(gitleaks*)",
+      "Bash(arjun*)",
       "Read(./.env)",
       "Read(./.env.*)",
       "Read(./**/*.pem)",
-      "Read(./**/*.key)"
+      "Read(./**/*.key)",
+      "Read(./**/*.keystore)",
+      "Read(./**/*id_rsa*)",
+      "Read(./**/*id_ed25519*)"
     ]
   }
 }
