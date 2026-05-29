@@ -2,11 +2,24 @@
 import os
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent.parent  # repo root (absolute)
+def _repo_root() -> Path:
+    """Find repo root by walking up from this file until 'backend' + 'docs' exist.
+
+    Computed at call time (not import) and marker-based, so it is immune to
+    CWD changes or env mutations from other tests.
+    """
+    here = Path(__file__).resolve()
+    for parent in here.parents:
+        if (parent / "backend").is_dir() and (parent / "docs").is_dir():
+            return parent
+    return here.parent.parent.parent
 
 
 def _exists(rel: str) -> bool:
-    return (ROOT / rel).exists()
+    return (_repo_root() / rel).exists()
+
+
+ROOT = _repo_root()
 
 
 REQUIRED_DIRS = [

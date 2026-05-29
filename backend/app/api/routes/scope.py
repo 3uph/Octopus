@@ -14,7 +14,9 @@ from app.api.dependencies.auth import CurrentUser, get_current_user
 from app.api.dependencies.db import get_db
 from app.core.permissions.rbac import require_operator
 from app.modules.programs.scope_service import ScopeService
+from app.modules.scope_parser.service import ScopeParserService
 from app.schemas.scope import ScopeChangeLogRead, ScopeRawRead, ScopeRawUpdate
+from app.schemas.scope_entities import ReviewItemAction, ScopeSummary
 
 router = APIRouter(prefix="/companies/{company_id}/programs/{program_id}/scope", tags=["scope"])
 
@@ -67,3 +69,53 @@ async def list_scope_history(
     # Tenant check via scope service
     await ScopeService(db).get_scope(company_id, program_id)
     return await ScopeService(db).list_change_logs(program_id, offset=offset, limit=limit)
+
+
+@router.post("/parse")
+async def parse_scope_endpoint(
+    company_id: uuid.UUID,
+    program_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: CurrentUser = Depends(require_operator),
+) -> dict:
+    """Parse raw scope into normalized ScopeItems (OCT-023). Idempotent."""
+    counts = await ScopeParserService(db).parse_and_store(company_id, program_id)
+    await audit_action(
+        "parse_scope", "program", str(program_id),
+        {"company_id": str(company_id), **counts}, db, user,
+    )
+    await db.commit()
+    return counts
+
+
+@router.get("/summary", response_model=ScopeSummary)
+async def scope_summary(
+    company_id: uuid.UUID,
+    program_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: CurrentUser = Depends(get_current_user),
+) -> ScopeSummary:
+    """Deterministic allowed/forbidden/ambiguous summary (OCT-024)."""
+    await ScopeService(db).get_scope(company_id, program_id)  # tenant check
+    return await ScopeParserService(db).get_summary(program_id)
+
+
+@router.post("/review")
+async def review_scope_item(
+    company_id: uuid.UUID,
+    program_id: uuid.UUID,
+    action: ReviewItemAction,
+    db: AsyncSession = Depends(get_db),
+    user: CurrentUser = Depends(require_operator),
+) -> dict:
+    """Confirm/reject a scope item under manual review (OCT-025)."""
+    await ScopeService(db).get_scope(company_id, program_id)  # tenant check
+    await ScopeParserService(db).review_item(
+        program_id, action.item_type, action.item_id, action.action
+    )
+    await audit_action(
+        "review_scope_item", action.item_type, str(action.item_id),
+        {"company_id": str(company_id), "action": action.action}, db, user,
+    )
+    await db.commit()
+    return {"status": "ok", "action": action.action}
